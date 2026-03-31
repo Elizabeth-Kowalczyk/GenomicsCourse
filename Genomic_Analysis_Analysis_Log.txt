@@ -1,46 +1,5 @@
-Notes for Genomic Analysis 
 
-When making a notes file use the name:
-*Analysis_Log.txt
-This way you can find it 
-
-To see the files/directory:
-ls 
-
-To see the files/directory with each each one on a new line:
-ls -l
-
-To see where you are, i.e. the working directory:
-pwd
-
-To make a file:
-touch name.txt
-
-To edit the file:
-nano name.txt
-
-Once in nano ctrl x to exit, this will bring up a yes or no command
-type y
-then it will show file name, click enter
-i.e
-ctrl x
-y
-enter
-
-If running a file and it panicks use:
-ctrl c
-
-To enter a directory/file
-cd
-
-To go back one directory:
-cd ..
-
-To go back home 
-cd ~
-
-
-
+#Notes/Hw for Genomic Analysis 
 #3/31/2026
 #Thursday Homework
 ls -l
@@ -51,6 +10,7 @@ ls -l
 #this put me in my git_testing directory, I need to make new files
 #I need to make new directories, to do this use the mkdir followed by the name
 mkdir project
+cd project
 #Based on the hw we need to have three directories in project
 mkdir data
 mkdir analysis
@@ -82,7 +42,14 @@ touch data/processed/.gitkeep
 touch analysis/fastqc/.gitkeep
 touch analysis/bamqc/.gitkeep
 touch scripts/.gitkeep
-#This is where I got to 
+#To save all the edits to git, we need to run the following commands 
+git init
+#I think we only need to do the init once
+git add .
+git commit -m "first commit"
+#this is the message it will see 
+git push --set-upstream origin main
+#this bring it to the screen on git hub
   
 
 
