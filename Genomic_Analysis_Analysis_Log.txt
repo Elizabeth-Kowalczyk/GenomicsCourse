@@ -1,0 +1,40 @@
+Notes for Genomic Analysis 
+
+When making a notes file use the name:
+*Analysis_Log.txt
+This way you can find it 
+
+To see the files/directory:
+ls 
+
+To see the files/directory with each each one on a new line:
+ls -l
+
+To see where you are, i.e. the working directory:
+pwd
+
+To make a file:
+touch name.txt
+
+To edit the file:
+nano name.txt
+
+Once in nano ctrl x to exit, this will bring up a yes or no command
+type y
+then it will show file name, click enter
+i.e
+ctrl x
+y
+enter
+
+If running a file and it panicks use:
+ctrl c
+
+To enter a directory/file
+cd
+
+To go back one directory:
+cd ..
+
+To go back home 
+cd ~
