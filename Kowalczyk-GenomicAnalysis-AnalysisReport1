@@ -1,0 +1,62 @@
+
+#Notes/Hw for Genomic Analysis
+#3/31/2026
+#Did not include question zero, however I set up my git hub account
+#This included making git@github.com:Elizabeth-Kowalczyk/GenomicsCourse.git which I can now access.
+#To do this go to the home page of git hub, click on new repository and give it a name.
+#Thursday Homework
+ls -l
+cd sandbox/
+ls -l
+cd git_testing/
+ls -l
+#this put me in my git_testing directory, I need to make new files
+#I need to make new directories, to do this use the mkdir followed by the name
+mkdir project
+cd project
+#Based on the hw we need to have three directories in project
+mkdir data
+mkdir analysis
+mkdir scripts
+#Then data needs two files, so navigate into the data directory
+cd data
+#navigates into the directory
+mkdir raw
+mkdir processed
+#we need to go back one directory to then navigate into analysis
+cd ..
+#takes you back one directory
+pwd
+#makes sure you are in the right working directory (project)
+cd analysis
+#navigate into the analysis directory to make their respective working directories
+mkdir fastqc
+mkdir bamqc
+#now we have a directory (git_testing), inside there I have one directory named project, in that i have three directories, and inside those I have stuff
+cd ..
+#went to the project directory
+touch Genomic_Analysis_Analysis_log.txt
+nano Genomic_Analaysis_Analysis_log.txt
+#Originally had it there, but realied we need to name it lastname-genomicanalysis-report1, so copied it here
+touch Kowalczyk-GenomicAnalysis-AnalysisReport1
+nano Kowalczyk-GenomicAnalysis-AnalysisReport1
+#you can always use tab to help fill it in
+#ctrl x to exit back to the the command line
+#I then ran these lines of codes in order to try to save my git stuff, honestly not sure this did anything
+touch data/raw/.gitkeep
+touch data/processed/.gitkeep
+touch analysis/fastqc/.gitkeep
+touch analysis/bamqc/.gitkeep
+touch scripts/.gitkeep
+#To save all the edits to git, we need to run the following commands
+git init
+#I think we only need to do the init once
+git add .
+git commit -m "first commit"
+#this is the message it will see
+git push --set-upstream origin main
+#this bring it to the screen on git hub
+#to make sure it worked I did it a second time so that the latest version is in github, just followed commands above
+#Should now be labled with my hw assignment
+
+
