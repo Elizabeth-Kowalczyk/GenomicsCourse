@@ -38,3 +38,51 @@ cd ..
 
 To go back home 
 cd ~
+
+
+
+#3/31/2026
+#Thursday Homework
+ls -l
+cd sandbox/
+ls -l
+cd git_testing/
+ls -l
+#this put me in my git_testing directory, I need to make new files
+#I need to make new directories, to do this use the mkdir followed by the name
+mkdir project
+#Based on the hw we need to have three directories in project
+mkdir data
+mkdir analysis
+mkdir scripts
+#Then data needs two files, so navigate into the data directory
+cd data
+#navigates into the directory
+mkdir raw
+mkdir processed
+#we need to go back one directory to then navigate into analysis
+cd ..
+#takes you back one directory
+pwd
+#makes sure you are in the right working directory (project)
+cd analysis
+#navigate into the analysis directory to make their respective working directories 
+mkdir fastqc
+mkdir bamqc
+#now we have a directory (git_testing), inside there I have one directory named project, in that i have three directories, and inside those I have stuff
+cd ..
+#went to the project directory
+touch Genomic_Analysis_Analysis_log.txt
+nano Genomic_Analaysis_Analysis_log.txt
+#now I am taking notes
+#ctrl x to exit back to the the command line
+#I then ran these lines of codes in order to try to save my git stuff
+touch data/raw/.gitkeep
+touch data/processed/.gitkeep
+touch analysis/fastqc/.gitkeep
+touch analysis/bamqc/.gitkeep
+touch scripts/.gitkeep
+#This is where I got to 
+  
+
+
