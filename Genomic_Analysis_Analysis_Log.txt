@@ -1,6 +1,9 @@
 
 #Notes/Hw for Genomic Analysis 
 #3/31/2026
+#Did not include question zero, however I set up my git hub account
+#This included making git@github.com:Elizabeth-Kowalczyk/GenomicsCourse.git which I can now access. 
+#To do this go to the home page of git hub, click on new repository and give it a name.
 #Thursday Homework
 ls -l
 cd sandbox/
@@ -50,6 +53,8 @@ git commit -m "first commit"
 #this is the message it will see 
 git push --set-upstream origin main
 #this bring it to the screen on git hub
+#to make sure it worked I did it a second time so that the latest version is in github, just followed commands above
+#Should now be labled with my hw assignment
   
 
 
