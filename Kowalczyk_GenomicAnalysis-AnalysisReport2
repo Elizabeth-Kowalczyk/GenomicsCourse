@@ -1,0 +1,158 @@
+#
+
+#To start I logged into our IP ‘10.119.6.131’ with the given username and password
+cd /data/Reynolds
+#This brings me into the Reynolds directory
+ls -l
+#I need to go copy the HW2 in genomics analysis
+cd GenomicAnalysisCourse/
+ls -l
+#This shows HW2
+#I need to go copy HW2 into /data/Reynolds/ejk0091
+cp -r HW2/*/data/Reynolds/ejk0091/
+#then I wanted to check to see if that worked, so I navigated to ejk0091
+cd ../
+ls -l
+cd ejk0091/
+ls -l
+#I see the files have successfully copied over
+
+#Question 1:You have been given a BED file named hw2.bed with five columns: chrom position_start position_end name score. Remember that BED files contain genomic intervals, denoted by the start and end position columns. Using your UNIX commands, extract all intervals that:
+#have length > 500 bp and have a score ≥ 100
+#I want to get an idea of what the bed file looks like, so I use head
+head hw2.bed
+#I see the 5 colums, chr, start, end, name, score
+#I am going to use the awk command from class
+#To get the length greated than 500 I need to find the difference between end (which is column 3) and the start (column 2). You denote colume by using $ sign. So the first part of my string will be ($3 - $2 > 500). This should give me read lengths longer than 500. I also was to find scores greater than or equal to 100. Score is in column 5, so that section will be ($5 >= 100). The greater than or equal sign is greater than followed by equal. This is an and control, so I will use the && command. That needs to be in quotes so that it goes together, then we need to pipe the file it is coming from into the file we want it to be in. 
+awk '($3 - $2 > 500) && ($5 >= 100)' hw2.bed > hw2_intervals.bed
+# I want to check it worked. 
+ls -l 
+head hw2_intervals.bed
+
+#Question 2:	Identify duplicated sample IDs in a PLINK .fam file You have been given a PLINK .fam file called hw2.fam has at least 5 columns: FID IID PID MID SEX. Remember, FID refers to “family ID” and can be used to store, family or population IDs for samples. IIDs refer to “Individual IDs”. PLINK .fam files can have more than five columns, with subsequent columns containing phenotype or other information about the sample. 
+# Find all IID values that appear more than once, and print them with their full rows to a new file called hw2_duplicates.fam   AND	Remove those duplicates from hw2.fam and get a count of how many times each unique FID is in this fam file. Save this to a file called hw2_FID.counts
+# start by checking file
+head hw2.fam
+awk '{print $2}' hw2.fam | sort | uniq -d
+#this prints stuff in column two from hw2.fam, then we use the pipe to sort for unique things. I believe to sort for duplicates we use the -d flag. I need to save that to a file.
+awk '{print $2}' hw2.fam | sort | uniq -d > hw2_uniqu_dups.txt
+head hw2_uniqu_dubs.txt
+#i then did this 
+awk 'NR==FNR {dup[$1]; next} $2 in dup' hw2_uniqu_dups.txt  hw2.fam > hw2_duplicates.fam
+# I believe this should look at the first file listed then the second one. Take the first colume ($1) and next to it put column 2 ($2).
+# next is part b of question 2
+awk '!seen[$2]++' hw2.fam > hw2_question2b.fam
+#I believe like in r syntax the explaination means like ‘no, or exclude’ this should exclude sulicates in column 2 ($2) from hw2.fam and put it into the new file. 
+awk '{print $1}' hw2_question2b.fam | sort | uniq -c > hw2_FID.counts
+#next we need to print column 1 from the file, sort by uniqu counts and print into hw2_FID.counts. 
+
+
+#Question 3:	Reformat FASTA headers to a standardized naming scheme. You have been given a FASTA file, hw2.fa containing mitochondrial genomes sequences from hundreds of samples. 
+#a.	Create a new file containing only the sample names named hw2_fasta_names.txt
+#b.	Rewrite each header in the fasta file so that anything beginning with and including the first underscore (_) is removed, leaving only the base ID.
+#Sequence lines must remain unchanged. Save these to a file called hw2_modID.fa
+#question 3, start by head hw2.fa
+head hw2.fa
+#got a bunch of nucleotides, but I think each line starts with “>” so in theory we should be able to grep it amf put it into a new file. 
+grep ">" hw2.fa > hw2_fasta_names.txt
+head hw2_fasta_names.txt
+#seems to have worked
+awk '/^>/ {sub(/_.*/, "", $0)} 1' hw2.fa > hw2_modID.fa
+# using the awk command we can search for the “>” sign and substitute it. Based on how the files are named, all have the _. Then the astrix says plus everything else, put nothing, in column 0 of the h22.fa file and print to modify
+
+
+#Question 4:	Finding samples in a PLINK .fam file. You have been given a second PLINK .fam file v62.0_HO_public.fam, which contains thousands of samples from around the world. 
+#a.	Find all the samples with FIDs from Russia. How many are there? How many unique FIDs from Russia do you find?
+#b.	Choose one of these FIDs. Use your UNIX commands to isolate full lines for those samples only. Save those lines to a new file, v62_<FID>.fam
+# I did grep Russian and got a lot of red and other stuff
+grep "Russia" v62.0_HO_public.fam
+# wc -1 gives you the number of samples
+grep "Russia" v62.0_HO_public.fam | wc -l
+#I got 986
+# then I’m going to string together earlier commands, so we are going to grab Russia from the file, looking at column 1 we are sorting by unque items and then printing the sample number
+grep "Russia" v62.0_HO_public.fam | awk '{print $1}' | sort | uniq | wc -l
+#I got 323
+# next part I chose to go with Russia_Tyumen
+awk '$1=="Russia_Tyumen_HG.DG"' v62.0_HO_public.fam > v62_Russia_Tyumen_HG.DG.fam
+#check
+head v62_Russia_Tyumen_HG.DG.fam
+
+
+#I attempted everything on my own, ran into a couple of issues and used stack forum throughout, I am unsure if I did everything correctly, but I think I did. My github is located in the other server of putty, so I did everything in our IP address except for the analytical log which is in the other server. It is home/sandbox/projects/Kowalczyk-GenomicAnalysis-AnalysisReport2
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kowalczyk_GenomicAnalysis-AnalysisRepor
