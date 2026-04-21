@@ -83,4 +83,122 @@ Cat hw3_fastqc.err
 #files were not done, checked squeue -u ejk0091 and I still have two jobs
 #walked away and let them run, checked back later and had all the files in HW3 directory
 
+#Create a FastQC report for each of the FASTQ files. Download the reports to your local machine and analyze them. Make note of the problems identified in each file, if you need to deal with them, and how you might do that.
+#was able to download them using WINSCP onto my computure
+#I see 3 pairs of files, i.e. 6 files total
+
+#starting with L002 R1 and R2
+#Per base sequence -> green check -> quality was all in the green
+#Per tile sequence quality -> red check 
+#Per sequence quality scores -> green check 
+#Per base sequence content -> yellow check -> squiggly at the start
+#Per sequence GC content -> yellow check -> GC not terrible, not perfectly the same though 
+#Per base N content -> green check 
+#Sequence Length Distribution -> green check 
+#Sequence Duplication Levels -> green check 
+#Overrepresented sequences -> green check 
+#Adapter Content -> red check -> illumina universal adapter increases near the end.
+
+#Looking at L007 R1 and R2
+#Per base sequence -> green check -> quality was mostly in the green but starting to move into yellow at the end
+#Per tile sequence quality -> yellow/red check 
+#Per sequence quality scores -> green check 
+#Per base sequence content -> yellow check -> squiggly at the beginning 
+#Per sequence GC content -> yellow check -> I think it looks pretty good 
+#Per base N content -> green check 
+#Sequence Length Distribution -> green check 
+#Sequence Duplication Levels -> green check 
+#Overrepresented sequences -> green check 
+#Adapter Content -> red check -> illumina universal adapter increases near the end
+
+#Looking at L003 R1 and R2
+#Per base sequence quality had a red x mark, started in the green but then moved into yellow and red.
+#Per tile sequence quality -> red/green check 
+#Per sequence quality scores -> green check 
+#Per base sequence content -> red check -> aggressive squiggly lines, super high
+#Per sequence GC content -> yellow/red check -> two humps in the GC content, does not line up with the theoretical distribution.
+#Per base N content -> green check 
+#Sequence Length Distribution -> green check 
+#Sequence Duplication Levels -> red check -> super high peak
+#Overrepresented sequences -> yellow check -> over represented sequences presented 
+#Adapter Content -> red check -> the universal adapter goes really high
+
+#need to run another slurm
+#this is a new day so I ran the conda environment command
+nano fastp_hw3.slurm
+
+#!/bin/bash
+#SBATCH --job-name=hw3_fastp
+#SBATCH --output=hw3_fastp.out
+#SBATCH --error=hw3_fastp.err
+#SBATCH --partition=cpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8GB
+#SBATCH --time=00:30:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elizabethkowalczyk@my.unthsc.edu
+
+#Trying to do all three in one script
+#Slighly different end flags for each based on what googled (not entirely sure they are the best.
+#L002 pair
+#fastp -i 22018FL-04-01-12_S12_L002_R1_001.fastq.gz \
+#-I 22018FL-04-01-12_S12_L002_R2_001.fastq.gz \
+#-o L002_R1_trimmed.fastq.gz \
+#-O L002_R2_trimmed.fastq.gz \
+#-w 4 -q 20
+
+#L007 pair
+#fastp -i 22018FL-04-01-21_S21_L007_R1_001.fastq.gz \
+#-I 22018FL-04-01-21_S21_L007_R2_001.fastq.gz \
+#-o L007_R1_trimmed.fastq.gz \
+#-O L007_R2_trimmed.fastq.gz \
+#-w 4 -q 20
+
+#L003 pair
+#fastp -i 22154FL-03-01-01_S1_L003_R1_001.fastq.gz \
+#-I 22154FL-03-01-01_S1_L003_R2_001.fastq.gz \
+#-o L003_R1_trimmed.fastq.gz \
+#-O L003_R2_trimmed.fastq.gz \
+#-w 4 -q 30 -u 20
+
+sbatch fastp_hw3.slurm
+squeue -u ejk0091
+
+#I see 6 trimmed files
+
+
+nano fastqc_trimmed.slurm
+# my next slurm script 
+
+#!/bin/bash
+#SBATCH --job-name=hw3_fastqc_trimmed
+#SBATCH --output=hw3_fastqc_trimmed.out
+#SBATCH --error=hw3_fastqc_trimmed.err
+#SBATCH --partition=cpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8GB
+#SBATCH --time=00:20:00
+
+#fastqc -t 8 *_trimmed.fastq.gz
+
+sbatch fastqc_trimmed.slurm
+squeue -u ejk0091
+
+#I ran than a second time
+
+#Adapter content reduced and the Per base quality improved (less red/yellow at ends)
+#I think I am ready for the next HW
+
+
+
+#To save all the edits to git, we need to run the following commands
+git init
+git add .
+git commit -m "first commit HW3"
+git push --set-upstream origin main
+
 
