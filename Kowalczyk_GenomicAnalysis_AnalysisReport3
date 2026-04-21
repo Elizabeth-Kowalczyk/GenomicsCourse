@@ -1,0 +1,86 @@
+#Genomic Analysis HW 3
+
+#Copy the files in /data/Reynolds/GenomicAnalysisCourse/HW3 to your data directory in a new sub-directory called HW3.
+#To start I logged into our IP ‘10.119.6.131’ with the given username and password
+cd /data/Reynolds/GenomicAnalysisCourse/ 
+#This brings me into the directory
+#I need to go copy the HW3 in genomics analysis
+ls -l
+#This shows HW3
+#I need to go copy the HW3 in genomics analysis into my directory (ejk0091)
+cp -r HW3/* /data/Reynolds/ejk0091/
+#got stuck here for a while, please note the space after the star
+#then I wanted to check to see if that worked, so I navigated to ejk0091
+cd ../
+ls -l
+cd ejk0091/
+ls -l
+#I see the files have successfully copied over
+#realized I originally made all my files and organization in putty, so I went into WIPscp and organized some stuff before moving on. One of the things included moving HW3 into a new data directory 
+cd data 
+ls -l 
+#I see HW3
+
+
+#You have been provided 3 pairs of FASTQ files to process. Perform the tasks below, taking careful notes in your analysis log  
+cd HW3
+ls -l
+#I see 6 files called  22018FL-04-01-12_S12_L002_R1_001.fastq.gz; 22018FL-04-01-12_S12_L002_R2_001.fastq.gz; 22018FL-04-01-21_S21_L007_R1_001.fastq.gz; 22018FL-04-01-21_S21_L007_R2_001.fastq.gz; 22154FL-03-01-01_S1_L003_R1_001.fastq.gz; 22154FL-03-01-01_S1_L003_R2_001.fastq.gz
+
+
+#Download the reports to your local machine and analyze them. Make note of the problems identified in each file, if you need to deal with them, and how you might do that
+#I need to get the reports onto my computure in a readable manner, these are big files, so lets use a slurm script to be able to get their zip files
+#start by making a nano slurm script
+nano fastqc_hw3.slurm
+
+#set it up like this 
+#!/bin/bash
+#SBATCH --job-name=hw3_fastqc
+#SBATCH --output=hw3_fastqc.out
+#SBATCH --error=hw3_fastqc.err
+#SBATCH --partition=cpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8GB
+#SBATCH --time=00:20:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elizabethkowalczyk@my.unthsc.edu
+
+#conda activate /data/Reynolds/GenomicAnalysisCourse/conda_envs/course_env/
+#cd /data/Reynolds/ejk0091/data/HW3/
+#fastqc -t 4 *.fastq.gz
+
+#I need to submit my job
+
+#tried sbatch fastqc_hw3.slurm
+#got some errors, turns out you cannot have blank space at the top, will cause a run failure. Had to ask chat for help here as I could not figure it out. Corrected the issue and moved onto to the next step
+
+
+sbatch fastqc_hw3.slurm
+#worked this time with the spaces removed. 
+#I want to see if it worked
+Ls -l
+#I see 2 new files, the hw3_fastqc.err and hw3_fastqc.out
+
+cat hw3_fastqc.out
+#I see 6 application/gzip files
+Cat hw3_fastqc.err
+# I see “CondaError: Run 'conda init' before 'conda activate'
+
+#Started analysis of 22018FL-04-01-12_S12_L002_R1_001.fastq.gz
+#Started analysis of 22018FL-04-01-12_S12_L002_R2_001.fastq.gz
+#Started analysis of 22018FL-04-01-21_S21_L007_R1_001.fastq.gz
+#Started analysis of 22018FL-04-01-21_S21_L007_R2_001.fastq.gz
+#Approx 5% complete for 22018FL-04-01-21_S21_L007_R1_001.fastq.gz
+#Approx 5% complete for 22018FL-04-01-21_S21_L007_R2_001.fastq.gz
+#Approx 5% complete for 22018FL-04-01-12_S12_L002_R1_001.fastq.gz
+#Approx 5% complete for 22018FL-04-01-12_S12_L002_R2_001.fastq.gz
+#Approx 10% complete for 22018FL-04-01-21_S21_L007_R1_001.fastq.gz
+#Approx 10% complete for 22018FL-04-01-21_S21_L007_R2_001.fastq.gz
+#Approx 10% complete for 22018FL-04-01-12_S12_L002_R1_001.fastq.gz
+
+#files were not done, checked squeue -u ejk0091 and I still have two jobs
+#walked away and let them run, checked back later and had all the files in HW3 directory
+
+
