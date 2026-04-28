@@ -127,3 +127,62 @@ samtools flagstat L002.sorted.bam > L002.flagstat.txt
 
 #now we wait
 
+#That worked so I did the same slurm script for L003 and L007 but with their respective files
+#They finished
+
+# Next is a slurm script for qualimapping 
+
+nano qualimap_hw4.slurm
+
+#I ran qualimap with this slurm script 
+#!/bin/bash
+#SBATCH --job-name=hw4_qualimap
+#SBATCH --output=hw4_qualimap.out
+#SBATCH --error=hw4_qualimap.err
+#SBATCH --partition=cpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32GB
+#SBATCH --time=04:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elizabethkowalczyk@my.unthsc.edu
+
+cd /data/Reynolds/ejk0091/data/HW4
+
+#qualimap L002
+qualimap bamqc -nt 8 -bam L002.sorted.bam -outdir L002_qualimap
+
+#qualimap L003
+qualimap bamqc -nt 8 -bam L003.sorted.bam -outdir L003_qualimap
+
+#qualimap L007
+qualimap bamqc -nt 8 -bam L007.sorted.bam -outdir L007_qualimap
+
+
+#Now we wait
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#to save
+git init
+git add .
+git commit -m "words"
+pit push --set-upstream origin main
+
