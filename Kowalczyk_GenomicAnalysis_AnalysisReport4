@@ -1,0 +1,129 @@
+#Genomic analysis HW 4
+
+#I always start a session by navigating to the class directory and loading the conda environment 
+cd /data/Reynolds/GenomicAnalysisCourse
+conda activate /data/Reynolds/GenomicAnalysisCourse/conda_envs/course_env/
+
+#I then navigate to my working directory and create a new directory called HW4
+cd ../
+ls -l
+cd ejk0091/
+cd data/
+ls -l
+mkdir HW4
+ls -l
+
+#I made my new working directory, but need to move my trimmed files into the new HW4 directory 
+cd HW3
+ls -l
+cp *_trimmed.fastq.gz ../HW4/
+cd ../
+ls -l
+cd HW4
+ls -l
+#I see the 6 trimmed fasrq.gz files
+
+# I now need to map the trimmed FASTQ files to hg38 with bwa mem
+bwa mem -t 4 \
+-R "@RG\tID:L002\tSM:L002\tPL:ILLUMINA\tLB:L002\tPU:L002" \
+/data/Reynolds/GenomicAnalysisCourse/reference/hg38.fa.gz \
+L002_R1_trimmed.fastq.gz \
+L002_R2_trimmed.fastq.gz \
+> L002.sam
+#prior to this code above I kept making spelling errors and messing up the direction of the slants, finally got it working (chat)
+
+#took forever, remembered I could write it as a slurm and submit it
+
+#!/bin/bash
+#SBATCH --job-name=hw4_bwa
+#SBATCH --output=hw4_bwa.out
+#SBATCH --error=hw4_bwa.err
+#SBATCH --partition=cpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32GB
+#SBATCH --time=06:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elizabethkowalczyk@my.unthsc.edu
+
+#source ~/.bashrc
+#conda activate /data/Reynolds/GenomicAnalysisCourse/conda_envs/course_env/
+
+#cd /data/Reynolds/ejk0091/data/HW4
+
+# L002
+# bwa mem -t 8 \
+  -R "@RG\tID:L002\tSM:L002\tPL:ILLUMINA\tLB:L002\tPU:L002" \
+  /data/Reynolds/GenomicAnalysisCourse/reference/hg38.fa.gz \
+  L002_R1_trimmed.fastq.gz \
+  L002_R2_trimmed.fastq.gz \
+  > L002.sam
+
+# L007
+# bwa mem -t 8 \
+  -R "@RG\tID:L007\tSM:L007\tPL:ILLUMINA\tLB:L007\tPU:L007" \
+  /data/Reynolds/GenomicAnalysisCourse/reference/hg38.fa.gz \
+  L007_R1_trimmed.fastq.gz \
+  L007_R2_trimmed.fastq.gz \
+  > L007.sam
+
+# L003
+#bwa mem -t 8 \
+  -R "@RG\tID:L003\tSM:L003\tPL:ILLUMINA\tLB:L003\tPU:L003" \
+  /data/Reynolds/GenomicAnalysisCourse/reference/hg38.fa.gz \
+  L003_R1_trimmed.fastq.gz \
+  L003_R2_trimmed.fastq.gz \
+  > L003.sam
+
+
+#Now we wait
+#Had to wait over night, but I now see hw4 slurm, error, and out. I also see my L002, L007 bam, I do not see L003 bam. Checked my errors.
+Nano hw4_bwa.err
+Nano hw4_bwa.out
+Squeue -u ejk0091
+ls -lh
+tail L007
+#I asked chat what was going on because I believed I should see all my files, however that was not the case. Looking at the errors it stopped due to time, meaning no L003 was even attempted. My squeue showed I had no jobs. I also check size, and L002 is much bigger than L007, so I tailed it and L007 was cut off, so I think only L002 was run to completion. 
+
+
+
+#I reran nearly the exact slurm as above, but I separated L003 and L007 and created a new slurm for each one, that way they will run independently and will hopefully go to completion.
+
+
+
+#Since L002 is completed I made the following Slurm script for going from sam to bam, getting flag stat 
+
+#!/bin/bash
+#SBATCH --job-name=hw4_L002_samtools
+#SBATCH --output=hw4_L002_samtools.out
+#SBATCH --error=hw4_L002_samtools.err
+#SBATCH --partition=cpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32GB
+#SBATCH --time=04:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elizabethkowalczyk@my.unthsc.edu
+
+#source ~/.bashrc
+#conda activate /data/Reynolds/GenomicAnalysisCourse/conda_envs/course_env/
+
+#cd /data/Reynolds/ejk0091/data/HW4
+
+#Sam to Bam
+samtools view -@ 8 -bS L002.sam > L002.bam
+
+#Sorting Bam
+samtools sort -@ 8 -o L002.sorted.bam L002.bam
+
+#Indexing
+samtools index L002.sorted.bam
+
+#flagstat
+samtools flagstat L002.sorted.bam > L002.flagstat.txt
+
+
+#now we wait
+
