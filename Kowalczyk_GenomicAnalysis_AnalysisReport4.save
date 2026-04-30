@@ -79,9 +79,9 @@ L002_R2_trimmed.fastq.gz \
 
 #Now we wait
 #Had to wait over night, but I now see hw4 slurm, error, and out. I also see my L002, L007 bam, I do not see L003 bam. Checked my errors.
-nano hw4_bwa.err
-nano hw4_bwa.out
-squeue -u ejk0091
+Nano hw4_bwa.err
+Nano hw4_bwa.out
+Squeue -u ejk0091
 ls -lh
 tail L007
 #I asked chat what was going on because I believed I should see all my files, however that was not the case. Looking at the errors it stopped due to time, meaning no L003 was even attempted. My squeue showed I had no jobs. I also check size, and L002 is much bigger than L007, so I tailed it and L007 was cut off, so I think only L002 was run to completion. 
@@ -159,91 +159,36 @@ qualimap bamqc -nt 8 -bam L003.sorted.bam -outdir L003_qualimap
 #qualimap L007
 qualimap bamqc -nt 8 -bam L007.sorted.bam -outdir L007_qualimap
 
-
 #Now we wait
 
-#failed
-
-#rerunning as a separate slurms
-
-#Need to make slurm scripts for markdups, this is the one for L002, I ran separate ones for L003 and L007
-
-# #!/bin/bash
-#SBATCH --job-name=markdup_L002
-#SBATCH --output=markdup_L002.out
-#SBATCH --error=markdup_L002.err
-#SBATCH --partition=cpu
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=32GB
-#SBATCH --time=10:00:00
-
-source ~/.bashrc
-conda activate /data/Reynolds/GenomicAnalysisCourse/conda_envs/course_env/
-
-cd /data/Reynolds/ejk0091/data/HW4
-
-picard MarkDuplicates \
-I=L002.sorted.bam \
-O=L002.markdup.bam \
-M=L002.markdup.metrics.txt
-
-
-samtools index L002.markdup.bam
 
 
 
-#I did it for all of them.
-
-#I am finally ready to answer question 5 and 6
-
-#Started by running cat
-
-cat L002.markdup.metrics.txt
-# I got percent duplication percent duplication of 0.180179 or about 18%
-
-cat L003.markdup.metrics.txt
-# I got percent duplication percent duplication of 0.970548 or about 97 %
-
-cat L007.markdup.metrics.txt
-# I got percent duplication percent duplication of 0.174026 or about 17.4%
 
 
-# I looked at the re-run qualimap 
-
-#L002
-qualimap bamqc -nt 8 -bam L002.markdup.bam -outdir L002_markdup_qualimap
-
-#L003
-qualimap bamqc -nt 8 -bam L003.markdup.bam -outdir L003_markdup_qualimap
-
-#L007
-qualimap bamqc -nt 8 -bam L007.markdup.bam -outdir L007_markdup_qualimap
-
-#Looking at L003, before qualimap it was about 92% and after markduplication it was about 97%
-
-#So its a little confusing because I would think that markduplication would have decreased the number of duplications, but maybe it is working to identify more?
-
-#To find coverage and variant call quality I used grep
-
-grep -i "mean coverage" L002_markdup_qualimap/genome_results.txt
-#mean coverage for L002 = 10.121X
-
-grep -i "mean coverage" L003_markdup_qualimap/genome_results.txt
-# mean coverage for L003 = 0.667X
-
-grep -i "mean coverage" L007_markdup_qualimap/genome_results.txt
-# mean coverage for L007 = 7.5551X
-
-#When we consider both the duplication rate the coverage, I would expect that the best variant calling would be for L002, it has the highest read depth, so on average more reads per genomic position. It’s duplication rate also wasn’t super high, although we typically like it to be smaller. L007 would give the next best with a bit lower read depth and slightly lower duplication. Given the duplication rate is pretty similar between L002 and L007, I would defer to the better-read depth. L003 had very low coverage, which is not a great sign, this is where the duplication rate becomes more important. In my experience with low pass data coverage of 0.67 is not uncommon, but the duplication rate is extremely high, even for low coverage. I would not be very confident in the variant calls.
 
 
-#To save all the edits to git, we need to run the following commands
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#to save 
 git init
-git add .
-git commit -m "Final commit HW4"
-git push --set-upstream origin main”
+git 
 
 
 
@@ -263,9 +208,4 @@ git push --set-upstream origin main”
 
 
 
-#to save
-git init
-git add .
-git commit -m "words"
-pit push --set-upstream origin main
 
